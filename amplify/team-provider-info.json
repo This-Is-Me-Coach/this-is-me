@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-thisisme-dev-155430-authRole",
+      "UnauthRoleArn": "arn:aws:iam::157353750009:role/amplify-thisisme-dev-155430-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::157353750009:role/amplify-thisisme-dev-155430-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-thisisme-dev-155430-deployment",
+      "UnauthRoleName": "amplify-thisisme-dev-155430-unauthRole",
+      "StackName": "amplify-thisisme-dev-155430",
+      "StackId": "arn:aws:cloudformation:us-east-1:157353750009:stack/amplify-thisisme-dev-155430/e53be3b0-ce47-11ec-99a8-0e636334a00f",
+      "AmplifyAppId": "dpr24ub40c9vf"
+    },
+    "categories": {
+      "auth": {
+        "thisismee0402fc0": {}
+      }
+    }
+  }
+}
