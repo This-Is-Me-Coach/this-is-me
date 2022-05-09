@@ -16,5 +16,41 @@
         "thisismee0402fc0": {}
       }
     }
+  },
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-thisisme-staging-185050-authRole",
+      "UnauthRoleArn": "arn:aws:iam::157353750009:role/amplify-thisisme-staging-185050-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::157353750009:role/amplify-thisisme-staging-185050-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-thisisme-staging-185050-deployment",
+      "UnauthRoleName": "amplify-thisisme-staging-185050-unauthRole",
+      "StackName": "amplify-thisisme-staging-185050",
+      "StackId": "arn:aws:cloudformation:us-east-1:157353750009:stack/amplify-thisisme-staging-185050/b15db540-cf29-11ec-8620-1249cef8ae51",
+      "AmplifyAppId": "dpr24ub40c9vf"
+    },
+    "categories": {
+      "auth": {
+        "thisismee0402fc0": {}
+      }
+    }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-thisisme-prod-190021-authRole",
+      "UnauthRoleArn": "arn:aws:iam::157353750009:role/amplify-thisisme-prod-190021-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::157353750009:role/amplify-thisisme-prod-190021-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-thisisme-prod-190021-deployment",
+      "UnauthRoleName": "amplify-thisisme-prod-190021-unauthRole",
+      "StackName": "amplify-thisisme-prod-190021",
+      "StackId": "arn:aws:cloudformation:us-east-1:157353750009:stack/amplify-thisisme-prod-190021/05f86130-cf2b-11ec-b048-128111ab84c3",
+      "AmplifyAppId": "dpr24ub40c9vf"
+    },
+    "categories": {
+      "auth": {
+        "thisismee0402fc0": {}
+      }
+    }
   }
 }
