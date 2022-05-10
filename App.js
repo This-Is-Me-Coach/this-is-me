@@ -1,18 +1,36 @@
-import {Amplify, Auth} from 'aws-amplify'
+import {Amplify, Auth, API, graphqlOperation} from 'aws-amplify'
 import config from './src/aws-exports'
 Amplify.configure(config);
 import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  Text
+  Text,
+  View
 } from 'react-native';
 import { withAuthenticator } from 'aws-amplify-react-native'
+import { listTodos } from './src/graphql/queries';
 
 class App extends React.Component {
+  
+  state = {
+    todos: []
+  }
+
+  async getTodos() {
+    try {
+      const todoList = await API.graphql(graphqlOperation(listTodos));
+      console.log('todo list:', todoList);
+      this.setState({
+        todos: todoList.data.listTodos.items
+      });
+    } catch (error) {
+      console.log('unable to fetch todo list...', error);
+    }
+  }
+
   async componentDidMount() {
-    const user = await Auth.currentAuthenticatedUser();
-    console.log('user:', user);
+    await this.getTodos();
   }
   signOut = () => {
     Auth.signOut()
@@ -22,6 +40,14 @@ class App extends React.Component {
   render() {
     return(
       <SafeAreaView style={styles.container}>
+        {
+          this.state.todos.map((todo, index) => (
+            <View key={index} style={styles.item}>
+              <Text style={styles.name}>{todo.name}</Text>
+              <Text style={styles.description}>{todo.description}</Text>
+            </View>
+          ))
+        }
         <Text style={styles.title}>Hello, This is Me!</Text>
         <Text onPress={this.signOut}>Sign Out</Text>
       </SafeAreaView>
@@ -35,6 +61,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  item: { padding: 10 },
+  name: { fontSize: 20 },
+  description: { fontWeight: '600', marginTop: 4, color: 'rgba(0, 0, 0, .5)' },
   title: {
     fontSize: 28
   }
