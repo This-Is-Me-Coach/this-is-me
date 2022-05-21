@@ -11,6 +11,7 @@ import { listTodos } from './src/graphql/queries';
 class App extends React.Component {
   state = {
     todos: [],
+    intro: true,
   };
 
   async getTodos() {
@@ -28,14 +29,22 @@ class App extends React.Component {
   async componentDidMount() {
     await this.getTodos();
   }
+
+  view_main() {
+    this.setState(() => {
+      return { intro: false };
+    });
+  }
+
   signOut = () => {
     Auth.signOut()
       .then(() => this.props.onStateChange('signedOut'))
       .catch((err) => console.log('err: ', err));
   };
   render() {
-    return <AppIntro />;
-    return (
+    return this.state.intro ? (
+      <AppIntro next={() => this.view_main()} />
+    ) : (
       <SafeAreaView style={styles.container}>
         {this.state.todos.map((todo, index) => (
           <View key={index} style={styles.item}>
@@ -43,7 +52,7 @@ class App extends React.Component {
             <Text style={styles.description}>{todo.description}</Text>
           </View>
         ))}
-        <Text style={styles.title}>Hello, test</Text>
+        <Text style={styles.title}>Main App</Text>
         <Text onPress={this.signOut}>Sign Out</Text>
       </SafeAreaView>
     );

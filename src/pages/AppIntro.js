@@ -10,24 +10,37 @@ import {
   View,
   Button,
   Image,
+  NativeModules,
+  Animated,
+  Easing,
 } from 'react-native';
+import { Platform } from 'react-native';
 
-import { IconButton, Icons } from '../components';
+const { StatusBarManager } = NativeModules;
+
+const status_bar_height = Platform.OS === 'ios' ? 20 : StatusBarManager.HEIGHT;
+
+import { IconButton, Icons, ProgressIndicator } from '../components';
 
 const { RightArrow } = Icons;
+
+const messages = [
+  'Welcome to the first day of the rest of your life. Start now....the journey with us, now....',
+  'Manageable steps to be in control of your life. Utilise your time and your phenominal personal resources.',
+  'Gift yourself 7 minutes a day to spend with us to achieve all you would want to.',
+];
+
+const circle_size = 500;
 
 export default class AppIntro extends React.Component {
   state = {
     step: 0,
+    splash_z_index: 10,
   };
 
-  messages = [
-    'Welcome to the first day of the rest of your life. Start now....the journey with us, now....',
-    'Manageable steps to be in control of your life. Utilise your time and your phenominal personal resources.',
-    'Gift yourself 7 minutes a day to spend with us to achieve all you would want to.',
-  ];
+  splash_opacity = new Animated.Value(1);
 
-  screens = this.messages.map((message) => {
+  screens = messages.map((message) => {
     return (
       <View style={[styles.screen]}>
         <Image
@@ -36,28 +49,106 @@ export default class AppIntro extends React.Component {
         />
 
         <Text style={styles.title}>{message}</Text>
-        {/* -> should be an icon*/}
       </View>
     );
   });
 
   next_screen(dir = 1) {
     this.setState((prev_state) => {
-      const next = (prev_state.step + dir) % this.messages.length;
-      return { step: next };
+      const next = prev_state.step + dir;
+
+      if (next < messages.length) {
+        return { step: next < 0 ? messages.length - 1 : next };
+      }
+
+      this.props.next();
+    });
+  }
+
+  componentDidMount() {
+    Animated.timing(this.splash_opacity, {
+      toValue: 0,
+      duration: 3000,
+      easing: Easing.back(10),
+      useNativeDriver: false,
+    }).start(() => {
+      this.setState(() => {
+        return { splash_z_index: -10 };
+      });
     });
   }
 
   render() {
     return (
       <SafeAreaView style={styles.global_container}>
+        <Animated.View
+          style={{
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            top: status_bar_height,
+            left: 0,
+            opacity: this.splash_opacity,
+            zIndex: this.state.splash_z_index,
+            backgroundColor: '#7E5FF9',
+          }}
+        >
+          <Image
+            style={[{ width: 200, height: 200 }]}
+            source={require('../../assets/logo.png')}
+          />
+          <Text style={[{ color: 'white', fontSize: 30, fontWeight: 'bold' }]}>
+            This Is Me
+          </Text>
+          <Text style={[{ color: 'white' }]}>
+            Welcome to the first day of the rest of your life.
+          </Text>
+          <View
+            style={[
+              {
+                position: 'absolute',
+                top: '80%',
+                width: circle_size,
+                height: circle_size,
+                alignItems: 'center',
+                justifyContent: 'center',
+              },
+              styles.cirle,
+            ]}
+          >
+            <View
+              style={[
+                {
+                  width: circle_size * 0.8,
+                  height: circle_size * 0.8,
+                },
+                styles.cirle,
+              ]}
+            ></View>
+          </View>
+        </Animated.View>
         <View style={[styles.container]}>
           {this.screens[this.state.step]}
-          <Text>{this.state.step}</Text>
+
+          <View style={{ paddingBottom: 50, margin: 10 }}>
+            <ProgressIndicator
+              steps={messages.length}
+              step={this.state.step}
+              color="#7E5FF9" //TODO: use theme
+            />
+          </View>
+
           <View style={styles.btn_container}>
             <Button
-              style={styles.button}
-              onPress={() => this.next_screen(-1)}
+              style={[styles.button]}
+              onPress={
+                this.state.step === 0
+                  ? () => this.props.next()
+                  : () => this.next_screen(-1)
+              }
               title={this.state.step === 0 ? 'skip' : 'back'}
               color="black"
               accessibilityLabel="Learn more about this purple button"
@@ -92,8 +183,6 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   btn_container: {
     flexDirection: 'row',
@@ -104,11 +193,13 @@ const styles = StyleSheet.create({
   img: {
     height: 350,
     width: 350,
+    alignSelf: 'center',
   },
   title: {
     fontSize: 22,
     fontWeight: '500',
     lineHeight: 28,
+    paddingLeft: 10,
   },
   rect: {
     width: 299,
@@ -116,43 +207,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#E6E6E6',
     alignSelf: 'center',
   },
-  rect2: {
-    width: 300,
-    height: 201,
-    backgroundColor: '#E6E6E6',
-    marginTop: 35,
-    marginLeft: 37,
-  },
-  rect3: {
-    width: 300,
-    height: 50,
-    backgroundColor: '#E6E6E6',
-    marginTop: 49,
-    marginLeft: 37,
-  },
-  rect4: {
-    width: 87,
-    height: 12,
-    backgroundColor: '#E6E6E6',
-    marginTop: -68,
-    marginLeft: 37,
+  cirle: {
+    borderRadius: circle_size,
+    backgroundColor: '#c7bafb',
+    shadowColor: 'black',
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
   },
 });
-
-//const styles = StyleSheet.create({
-//  container: {
-//    flex: 1,
-//    justifyContent: 'center',
-//    alignItems: 'center',
-//  },
-//  item: { padding: 10 },
-//  name: { fontSize: 20 },
-//  description: { fontWeight: '600', marginTop: 4, color: 'rgba(0, 0, 0, .5)' },
-//  title: {
-//    fontSize: 28,
-//  },
-//});
-
-//withAuthenticator(AppIntro, {
-//  includeGreetings: true,
-//});
