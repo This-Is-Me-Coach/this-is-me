@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
     fontFamily: 'SourceSansPro-Regular',
     color: '#e2a45b'
   }
-})
+});
 
 export default Input
