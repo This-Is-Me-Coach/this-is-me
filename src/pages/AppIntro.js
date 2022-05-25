@@ -1,6 +1,3 @@
-//import {Amplify, Auth, API, graphqlOperation} from 'aws-amplify'
-//import config from './src/aws-exports'
-//Amplify.configure(config);
 import React from 'react';
 import {
   SafeAreaView,
@@ -18,7 +15,20 @@ import { Platform } from 'react-native';
 
 const { StatusBarManager } = NativeModules;
 
-const status_bar_height = Platform.OS === 'ios' ? 20 : StatusBarManager.HEIGHT;
+const status_bar_height = get_status_bar_height();
+
+//TODO: move to helpers.js??
+function get_status_bar_height() {
+  if (Platform.OS === 'web') {
+    return 0;
+  }
+
+  if (Platform.OS === 'ios') {
+    return 20;
+  }
+
+  return StatusBarManager.HEIGHT;
+}
 
 import { IconButton, Icons, ProgressIndicator } from '../components';
 
