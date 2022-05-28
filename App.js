@@ -17,7 +17,7 @@ Amplify.configure(config);
 function AppWithNavigationContainer() {
   return (
     <NavigationContainer>
-      <App />
+        <App />
     </NavigationContainer>
   );
 }
