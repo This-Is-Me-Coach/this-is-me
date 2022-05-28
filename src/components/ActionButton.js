@@ -1,37 +1,46 @@
-import React from 'react'
+import React from 'react';
 import {
-  TouchableHighlight, Text, View, StyleSheet
-} from 'react-native'
+  TouchableHighlight,
+  Text,
+  View,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
+
+const { width } = Dimensions.get('window');
 
 const ActionButton = ({
-  onPress, title
+  onPress,
+  title,
+  color = 'white',
+  bgColor = '#7E5FF9',
 }) => (
   <TouchableHighlight
     onPress={onPress}
-    style={styles.buttonContainer}
-    underlayColor='#ffbf2d'
+    style={[{ backgroundColor: bgColor }, styles.buttonContainer]}
+    underlayColor="#ffbf2d"
   >
     <View style={styles.button}>
-      <Text style={styles.buttonText}>{title}</Text>
+      <Text style={[{ color }, styles.buttonText]}>{title}</Text>
     </View>
   </TouchableHighlight>
-)
+);
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: '#ffb100',
-    borderRadius: 25
+    borderRadius: 4,
+    marginBottom: 10,
   },
   button: {
     height: 50,
+    width: width - 20,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonText: {
-    color: 'white',
     fontSize: 20,
-    fontFamily: 'SourceSansPro-SemiBold'
-  }
-})
+    fontFamily: 'SourceSansPro-SemiBold',
+  },
+});
 
-export default ActionButton
+export default ActionButton;
