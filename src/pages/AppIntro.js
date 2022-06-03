@@ -55,7 +55,7 @@ export default class AppIntro extends React.Component {
       <View style={[styles.screen]}>
         <Image
           style={[styles.img]}
-          source={require('../../assets/image_12.png')}
+          source={require('../assets/image_12.png')}
         />
 
         <Text style={styles.title}>{message}</Text>
@@ -108,7 +108,7 @@ export default class AppIntro extends React.Component {
         >
           <Image
             style={[{ width: 200, height: 200 }]}
-            source={require('../../assets/logo.png')}
+            source={require('../assets/logo.png')}
           />
           <Text style={[{ color: 'white', fontSize: 30, fontWeight: 'bold' }]}>
             This Is Me

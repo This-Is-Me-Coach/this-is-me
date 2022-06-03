@@ -1,78 +1,61 @@
-import { Amplify, Auth, API, graphqlOperation } from 'aws-amplify';
+import { Amplify } from 'aws-amplify';
+
+import 'react-native-gesture-handler';
+import { AppRegistry } from 'react-native';
+import { expo as expoConfig } from './app.json';
+import { registerRootComponent } from 'expo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import config from './src/aws-exports';
-Amplify.configure(config);
-import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+
+import 'react-native-gesture-handler';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import App from './src/Main';
 import AppIntro from './src/pages/AppIntro';
 
-import { withAuthenticator } from 'aws-amplify-react-native';
-import { listTodos } from './src/graphql/queries';
+Amplify.configure(config);
 
-class App extends React.Component {
-  state = {
-    todos: [],
-    intro: true,
-  };
+function AppWithNavigationContainer() {
+  const [initialized, setInitialized] = React.useState(false);
 
-  async getTodos() {
-    try {
-      const todoList = await API.graphql(graphqlOperation(listTodos));
-      console.log('todo list:', todoList);
-      this.setState({
-        todos: todoList.data.listTodos.items,
-      });
-    } catch (error) {
-      console.log('unable to fetch todo list...', error);
-    }
-  }
+  React.useEffect(() => {
+    isInitialized().then((val) => setInitialized(val === 'true'));
+  }, []);
 
-  async componentDidMount() {
-    await this.getTodos();
-  }
-
-  view_main() {
-    this.setState(() => {
-      return { intro: false };
-    });
-  }
-
-  signOut = () => {
-    Auth.signOut()
-      .then(() => this.props.onStateChange('signedOut'))
-      .catch((err) => console.log('err: ', err));
-  };
-  render() {
-    return this.state.intro ? (
-      <AppIntro next={() => this.view_main()} />
-    ) : (
-      <SafeAreaView style={styles.container}>
-        {this.state.todos.map((todo, index) => (
-          <View key={index} style={styles.item}>
-            <Text style={styles.name}>{todo.name}</Text>
-            <Text style={styles.description}>{todo.description}</Text>
-          </View>
-        ))}
-        <Text style={styles.title}>Main App</Text>
-        <Text onPress={this.signOut}>Sign Out</Text>
-      </SafeAreaView>
-    );
-  }
+  return initialized ? (
+    <NavigationContainer>
+      <App />
+    </NavigationContainer>
+  ) : (
+    <AppIntro
+      next={() => {
+        initialize();
+        setInitialized(true);
+      }}
+    />
+  );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  item: { padding: 10 },
-  name: { fontSize: 20 },
-  description: { fontWeight: '600', marginTop: 4, color: 'rgba(0, 0, 0, .5)' },
-  title: {
-    fontSize: 28,
-  },
-});
+const initialize = async () => {
+  try {
+    await AsyncStorage.setItem('initialized', 'true');
+  } catch (e) {
+    // error reading value
+    console.log(e);
+  }
+};
 
-export default withAuthenticator(App, {
-  includeGreetings: false,
-});
+const isInitialized = async () => {
+  try {
+    const value = await AsyncStorage.getItem('initialized');
+    if (value !== null) {
+      return value;
+    }
+  } catch (e) {
+    // error reading value
+    console.log(e);
+  }
+};
+
+registerRootComponent(AppWithNavigationContainer);
