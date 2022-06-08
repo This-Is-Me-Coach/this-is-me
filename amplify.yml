@@ -25,7 +25,11 @@ frontend:
         - if [ "${AWS_BRANCH}" = "main" ]; then echo "expo build:web"; fi
         - if [ "${AWS_BRANCH}" = "staging" ]; then echo "expo start"; fi
   artifacts:
-    baseDirectory: if [ "${AWS_BRANCH}" = "main" ]; then echo "web-build"; fi
+    {{ if '$AWS_BRANCH' eq "main" }}
+    baseDirectory: web-build
+    {{ else }}
+    baseDirectory: /
+    {{ end }}
     files:
       - '**/*'
   cache:
