@@ -22,9 +22,9 @@ frontend:
           fi
     build:
       commands:
-        - expo start --clear --dev
+        - expo build:web
   artifacts:
-    baseDirectory: /
+    baseDirectory: web-build
     files:
       - '**/*'
   cache:
