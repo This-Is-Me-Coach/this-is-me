@@ -1,4 +1,4 @@
-version: 1
+version: 1.0
 backend:
   phases:
     build:
@@ -11,19 +11,18 @@ frontend:
       commands:
         - npm ci
         - nvm use 16
-        - npm install --silent --global expo-cli
-        - |-
+        - npm install --quiet --global expo-cli
+        - >
           if [ -f yarn.lock ]; then
-           yarn
+            yarn
           elif [ -f package-lock.json ] || [ -f npm-shrinkwrap.json ]; then
-           npm ci
+            npm ci
           else
-           npm install
+            npm install
           fi
     build:
       commands:
-        - if [ "${AWS_BRANCH}" = "main" ]; then echo "expo build:web"; fi
-        - if [ "${AWS_BRANCH}" = "staging" ]; then echo "expo build:web"; fi
+        - expo build:web
   artifacts:
     baseDirectory: web-build
     files:
