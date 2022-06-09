@@ -22,7 +22,7 @@ frontend:
           fi
     build:
       commands:
-        - expo start --clear --dev
+        - exp start --no-dev --minify --offline --non-interactive
   artifacts:
     baseDirectory: /
     files:
