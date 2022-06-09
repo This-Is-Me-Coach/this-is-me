@@ -23,7 +23,7 @@ frontend:
     build:
       commands:
         - if [ "${AWS_BRANCH}" = "main" ]; then echo "expo build:web"; fi
-        - if [ "${AWS_BRANCH}" = "staging" ]; then echo "expo start"; fi
+        - if [ "${AWS_BRANCH}" = "staging" ]; then echo "expo start --no-dev --minify"; fi
   artifacts:
     baseDirectory: /src
     files:
